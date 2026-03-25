@@ -32,7 +32,7 @@ const pageTransition = { duration: 0.75, ease: [0.25, 0.46, 0.45, 0.94] }
 // Scenes that skip the glass card (envelope scene looks better bare)
 const BARE_SCENES = new Set([0])
 
-export default function SceneRouter({ sceneIndex, isEnvelopeOpen }) {
+export default function SceneRouter({ sceneIndex, isEnvelopeOpen, onEnvelopeOpen }) {
   const SceneComponent = SCENES[sceneIndex]
   const bare = BARE_SCENES.has(sceneIndex)
 
@@ -52,6 +52,7 @@ export default function SceneRouter({ sceneIndex, isEnvelopeOpen }) {
           {bare ? (
             <SceneComponent
               isEnvelopeOpen={isEnvelopeOpen}
+              onOpen={onEnvelopeOpen}
             />
           ) : (
             <div style={{

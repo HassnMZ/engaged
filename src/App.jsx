@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import Background from './components/Background'
 import Letterbox from './components/Letterbox'
 import ParticleSystem from './components/ParticleSystem'
@@ -17,15 +17,16 @@ export default function App() {
   const { isPlaying, togglePlay } = useMusic()
   const { advance, skipTo } = useAutoAdvance(sceneIndex, setSceneIndex)
 
-  // Auto-open envelope on mount
-  useEffect(() => {
-    const t = setTimeout(() => setIsEnvelopeOpen(true), ENVELOPE_OPEN_DELAY)
-    return () => clearTimeout(t)
-  }, [])
+  // Called when user taps the envelope
+  const handleEnvelopeOpen = useCallback(() => {
+    if (isEnvelopeOpen) return
+    setIsEnvelopeOpen(true)
+    setTimeout(() => advance(), ENVELOPE_OPEN_DELAY)
+  }, [isEnvelopeOpen, advance])
 
-  // Tap anywhere to skip — disabled on final scene
+  // Tap anywhere to skip — disabled on scene 0 (envelope) and final scene
   const handleGlobalTap = useCallback(() => {
-    if (sceneIndex < TOTAL_SCENES - 1) advance()
+    if (sceneIndex > 0 && sceneIndex < TOTAL_SCENES - 1) advance()
   }, [sceneIndex, advance])
 
   const showLetterbox = sceneIndex === 0
@@ -44,6 +45,7 @@ export default function App() {
       <SceneRouter
         sceneIndex={sceneIndex}
         isEnvelopeOpen={isEnvelopeOpen}
+        onEnvelopeOpen={handleEnvelopeOpen}
       />
       <MusicButton
         isPlaying={isPlaying}

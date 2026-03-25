@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
+import { ENVELOPE_HINT_DELAY } from '../constants/timeline'
 
-export default function Envelope({ isOpen }) {
+export default function Envelope({ isOpen, onOpen }) {
   return (
     <motion.div
       animate={{ opacity: isOpen ? [1, 1, 0] : 1 }}
@@ -8,9 +9,13 @@ export default function Envelope({ isOpen }) {
       className="flex flex-col items-center gap-6"
     >
       {/* Envelope */}
-      <div
+      <motion.div
         className="relative"
-        style={{ width: 'min(220px, 60vw)', height: 'min(140px, 38vw)', perspective: '700px' }}
+        style={{ width: 'min(220px, 60vw)', height: 'min(140px, 38vw)', perspective: '700px', cursor: isOpen ? 'default' : 'pointer' }}
+        onClick={!isOpen ? onOpen : undefined}
+        whileHover={!isOpen ? { scale: 1.04 } : {}}
+        whileTap={!isOpen ? { scale: 0.97 } : {}}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       >
         {/* Envelope body */}
         <div
@@ -60,46 +65,46 @@ export default function Envelope({ isOpen }) {
         />
 
         {/* Wax seal */}
-        <motion.div
-          className="absolute rounded-full flex items-center justify-center"
-          style={{
-            width: 'min(36px, 10vw)',
-            height: 'min(36px, 10vw)',
-            background: 'radial-gradient(circle, #8b1a1a, #6b0000)',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            zIndex: 3,
-            fontSize: 'clamp(8px, 2.5vw, 12px)',
-            color: '#f7e7a1',
-            letterSpacing: '1px',
-          }}
-          animate={{ opacity: isOpen ? 0 : 1, scale: isOpen ? 0.8 : 1 }}
-          transition={{ duration: 0.4, delay: isOpen ? 0.2 : 0 }}
-        >
-          ♥
-        </motion.div>
-      </div>
+        <div className="absolute inset-0 flex items-center justify-center" style={{ zIndex: 3 }}>
+          <motion.div
+            className="rounded-full flex items-center justify-center"
+            style={{
+              width: 'min(36px, 10vw)',
+              height: 'min(36px, 10vw)',
+              background: 'radial-gradient(circle, #8b1a1a, #6b0000)',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
+              fontSize: 'clamp(8px, 2.5vw, 12px)',
+              color: '#f7e7a1',
+              letterSpacing: '1px',
+            }}
+            animate={{ opacity: isOpen ? 0 : 1, scale: isOpen ? 0.8 : 1 }}
+            transition={{ duration: 0.4, delay: isOpen ? 0.2 : 0 }}
+          >
+            ♥
+          </motion.div>
+        </div>
+      </motion.div>
 
-      {/* "Open Invitation" hint */}
+      {/* "Tap to open" hint — fades in after ENVELOPE_HINT_DELAY */}
       <motion.p
         className="text-center"
         style={{
           fontSize: 'clamp(13px, 3vw, 16px)',
-          letterSpacing: '3px',
-          color: 'rgba(212,175,55,0.7)',
+          letterSpacing: '4px',
+          color: '#f7e7a1',
+          textShadow: '0 0 18px rgba(212,175,55,0.9), 0 1px 4px rgba(0,0,0,0.8)',
         }}
-        animate={{
-          opacity: isOpen ? 0 : [0.4, 0.9, 0.4],
-        }}
-        transition={
-          isOpen
-            ? { duration: 0.3 }
-            : { duration: 2.5, repeat: Infinity, ease: 'easeInOut' }
+        initial={{ opacity: 0 }}
+        animate={isOpen
+          ? { opacity: 0 }
+          : { opacity: [0, 0, 0.5, 0.95, 0.5] }
+        }
+        transition={isOpen
+          ? { duration: 0.3 }
+          : { duration: 3, delay: ENVELOPE_HINT_DELAY / 1000, repeat: Infinity, ease: 'easeInOut', times: [0, 0.3, 0.5, 0.75, 1] }
         }
       >
-        YOUR INVITATION
+        TAP TO OPEN
       </motion.p>
     </motion.div>
   )
