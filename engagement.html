@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hassan & Merhan</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+<!-- Face API -->
+<script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.min.js"></script>
+
+<style>
+body{
+  margin:0;
+  overflow:hidden;
+  font-family: Georgia, serif;
+  background:black;
+  color:#d4af37;
+}
+
+/* Fade-in effect */
+.fade-in{
+  animation:fadeIn 2.5s ease forwards;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+
+/* Scene container */
+.scene{
+  position:absolute;
+  top:0; left:0;
+  width:100%;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  opacity:0;
+  transition:opacity 2s ease;
+  padding:30px;
+}
+
+.scene.active{
+  opacity:1;
+}
+
+/* Background cinematic */
+.bg{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:linear-gradient(rgba(60,45,20,0.5), rgba(40,30,10,0.7)), url("photo.jpg") center/cover no-repeat;
+  z-index:-1;
+  animation:zoom 30s ease-in-out infinite alternate;
+  object-fit:cover;
+  object-position:center center;
+  transition: transform 30s ease-in-out, object-position 1s ease;
+}
+
+/* Zoom animation */
+@keyframes zoom{
+  from{transform:scale(1);}
+  to{transform:scale(1.12);}
+}
+
+/* Gold gradient text */
+.gold{
+  background:linear-gradient(45deg,#d4af37,#f7e7a1,#c5a032);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* Envelope */
+.envelope{
+  width:220px;
+  height:140px;
+  background:linear-gradient(45deg,#d4af37,#f7e7a1);
+  border-radius:8px;
+  position:relative;
+  cursor:pointer;
+  box-shadow:0 10px 40px rgba(0,0,0,0.2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.envelope:before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:linear-gradient(45deg,#c5a032,#f7e7a1);
+  clip-path:polygon(0 0, 50% 55%, 100% 0);
+  transform-origin:top;
+  transition:1.5s ease;
+}
+
+.envelope.open:before{
+  transform:rotateX(180deg);
+}
+
+/* Typography */
+h1{
+  font-size:30px;
+  letter-spacing:4px;
+  opacity:0;
+  animation:textFade 2s ease forwards;
+  animation-delay:0.5s;
+}
+
+.names{
+  font-family:'Great Vibes', cursive;
+  font-size:72px;
+  letter-spacing:2px;
+  opacity:0;
+  animation:textFade 2.5s ease forwards;
+}
+
+.text{
+  font-size:24px;
+  letter-spacing:1.5px;
+  line-height:1.9;
+  opacity:0;
+  animation:textFade 2.5s ease forwards;
+}
+
+.details{
+  font-size:26px;
+  letter-spacing:1.5px;
+  line-height:2;
+  opacity:0;
+  animation:textFade 2.5s ease forwards;
+}
+
+/* Text animation */
+@keyframes textFade{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* Subtle particles */
+.particle{
+  position:fixed;
+  width:4px;
+  height:4px;
+  background:#d4af37;
+  border-radius:50%;
+  opacity:0.2;
+  animation:float 10s linear infinite;
+}
+
+@keyframes float{
+  0%{transform:translateY(100vh); opacity:0;}
+  20%{opacity:0.3;}
+  100%{transform:translateY(-10vh); opacity:0;}
+}
+
+</style>
+</head>
+
+<body class="fade-in">
+
+<div class="bg" id="bgImage"></div>
+
+<!-- Scene 1 -->
+<div class="scene active">
+  <div class="envelope" id="envelope"></div>
+  <p class="text">Open Invitation</p>
+</div>
+
+<!-- Scene 2 -->
+<div class="scene">
+  <h1 class="gold">THE START OF OUR FOREVER</h1>
+</div>
+
+<!-- Scene 3 -->
+<div class="scene">
+  <div class="names gold">Hassan & Merhan</div>
+</div>
+
+<!-- Scene 4 -->
+<div class="scene">
+  <div class="text">WE ARE GETTING ENGAGED</div>
+</div>
+
+<!-- Scene 5 -->
+<div class="scene">
+  <div class="details">
+    <strong>Date</strong><br>
+    5 April 2026
+  </div>
+</div>
+
+<!-- Scene 6 -->
+<div class="scene">
+  <div class="details">
+    <strong>Time</strong><br>
+    3:30 PM - 7:00 PM
+  </div>
+</div>
+
+<!-- Scene 7 -->
+<div class="scene">
+  <div class="details">
+    <strong>Location</strong><br>
+    Open Air Garden<br>
+    Katameya Gardens Club<br>
+    Zahraa El Maadi
+  </div>
+</div>
+
+<!-- Scene 8 -->
+<div class="scene">
+  <div class="details">
+    <strong>Dress Code</strong><br>
+    Minimal
+  </div>
+</div>
+
+<!-- Scene 9 -->
+<div class="scene">
+  <div class="text gold">Join us to celebrate</div>
+</div>
+
+<audio id="music" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// Tap & scene control
+let scenes = document.querySelectorAll(".scene");
+let index = 0;
+let opened = false;
+
+document.addEventListener("click", function(){
+  if(!opened){
+    opened = true;
+    document.getElementById("envelope").classList.add("open");
+    document.getElementById("music").play();
+    setTimeout(()=>{ nextScene(); },1500);
+    return;
+  }
+  nextScene();
+});
+
+function nextScene(){
+  if(index < scenes.length - 1){
+    scenes[index].classList.remove("active");
+    index++;
+    scenes[index].classList.add("active");
+  }
+}
+
+// Particles
+function createParticle(){
+  let p = document.createElement("div");
+  p.classList.add("particle");
+  p.style.left = Math.random()*100 + "vw";
+  p.style.animationDuration = (8 + Math.random()*5) + "s";
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(),12000);
+}
+setInterval(createParticle,600);
+
+// Face detection
+const bg = document.getElementById("bgImage");
+
+Promise.all([
+  faceapi.nets.ssdMobilenetv1.loadFromUri('/models'),
+  faceapi.nets.faceLandmark68Net.loadFromUri('/models')
+]).then(detectFace);
+
+async function detectFace(){
+  const detection = await faceapi.detectSingleFace(bg);
+  if(detection){
+    const box = detection.box;
+    const x = (box.x + box.width/2) / bg.naturalWidth * 100;
+    const y = (box.y + box.height/2) / bg.naturalHeight * 100;
+    bg.style.objectPosition = `${x}% ${y}%`;
+  }
+}
+</script>
+
+</body>
+</html>

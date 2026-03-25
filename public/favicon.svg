@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c5a032"/>
+      <stop offset="50%" stop-color="#f7e7a1"/>
+      <stop offset="100%" stop-color="#d4af37"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d4af37"/>
+      <stop offset="50%" stop-color="#f7e7a1"/>
+      <stop offset="100%" stop-color="#c5a032"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Left ring -->
+  <circle cx="24" cy="32" r="12" fill="none" stroke="url(#g1)" stroke-width="4"/>
+  <!-- Left ring gem top -->
+  <polygon points="24,14 27,19 24,21 21,19" fill="url(#g1)" opacity="0.9"/>
+  <polygon points="24,17 26,19 24,20 22,19" fill="#fff" opacity="0.4"/>
+
+  <!-- Right ring -->
+  <circle cx="40" cy="32" r="12" fill="none" stroke="url(#g2)" stroke-width="4"/>
+  <!-- Right ring gem top -->
+  <polygon points="40,14 43,19 40,21 37,19" fill="url(#g2)" opacity="0.9"/>
+  <polygon points="40,17 42,19 40,20 38,19" fill="#fff" opacity="0.4"/>
+
+  <!-- Cover the overlap seam so rings look interlinked -->
+  <!-- Left ring covers right ring on the left side of overlap -->
+  <path d="M34,22 A12,12 0 0,0 34,42" fill="none" stroke="#0d0b08" stroke-width="4.5"/>
+  <path d="M34,22 A12,12 0 0,0 34,42" fill="none" stroke="url(#g1)" stroke-width="4"/>
+</svg>

@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gold: #d4af37;
+  --gold-light: #f7e7a1;
+  --gold-dark: #c5a032;
+  --bg: #0d0b08;
+  --focal-x: 50%;
+  --focal-y: 22%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0d0b08;
+  color: #d4af37;
+  font-family: Georgia, serif;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.gold-gradient-text {
+  background: linear-gradient(45deg, #d4af37, #f7e7a1, #c5a032);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.music-ring {
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+.music-ring:nth-child(2) { animation-delay: 0.6s; }
+.music-ring:nth-child(3) { animation-delay: 1.2s; }
+
+@keyframes sparkle-pop {
+  0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1) rotate(180deg); opacity: 1; }
+}
+
+/* ── Responsive safeguards ── */
+
+/* Prevent content from touching screen edges on very small devices */
+@media (max-width: 380px) {
+  :root { --focal-y: 20%; }
+}
+
+/* Ensure fixed UI chrome (dots, music btn) don't overlap content */
+@media (max-height: 600px) {
+  /* Landscape phones — shrink chrome */
+  .music-ring { animation: none; }
+}
+
+/* Prevent iOS Safari address bar from clipping the bottom dots */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  html, body, #root {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
